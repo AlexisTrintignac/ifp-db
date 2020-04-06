@@ -1,4 +1,4 @@
-package Domain;
+package Domain.Models;
 
 public class NewsTags {
 

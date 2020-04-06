@@ -1,6 +1,7 @@
 package Persistance;
 
-import Domain.Tags;
+import Domain.Dto.TagsDto;
+import Domain.Models.Tags;
 
 import java.sql.*;
 
@@ -16,8 +17,8 @@ public class TagsDAO {
         cx.close();
     }
 
-    public Tags getById(int id) throws SQLException, ClassNotFoundException {
-        Tags tag = new Tags(null);
+    public TagsDto getById(int id) throws SQLException, ClassNotFoundException {
+        TagsDto tag = new TagsDto();
         ConnectDB connectDB = new ConnectDB();
         Connection cx = connectDB.connect();
         PreparedStatement stmt = cx.prepareStatement("Select * from tags where id = ?");
@@ -26,8 +27,8 @@ public class TagsDAO {
         while (rs.next()) {
             int idTag = rs.getInt(1);
             String tagContenu = rs.getString(2);
-            tag.id = idTag;
-            tag.tag = tagContenu;
+            tag.setId(idTag);
+            tag.setTag(tagContenu);
         }
         cx.close();
         return tag;

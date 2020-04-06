@@ -1,7 +1,7 @@
 package Persistance;
 
-import Domain.News;
-import Domain.Tags;
+import Domain.Models.News;
+import Domain.Models.Tags;
 
 import java.sql.*;
 

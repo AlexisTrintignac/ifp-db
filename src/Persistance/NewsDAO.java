@@ -1,35 +1,43 @@
 package Persistance;
 
-import Domain.News;
-import Domain.Tags;
+import Domain.Dto.NewsDto;
+import Domain.Dto.ReporterNews;
+import Domain.Dto.TagsById;
+import Domain.Models.News;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Date;
 
 public class NewsDAO {
 
-    public void reporterReadById(int id) throws SQLException, ClassNotFoundException {
+    public ReporterNews reporterReadById(int id) throws SQLException, ClassNotFoundException {
+        ReporterNews news = new ReporterNews();
         ConnectDB connectDB = new ConnectDB();
         Connection cx = connectDB.connect();
-        PreparedStatement stmt = cx.prepareStatement("Select pseudo,titre,contenu,date_news from news,reporter where news.id_reporter = reporter.id and news.id = ?");
+        PreparedStatement stmt = cx.prepareStatement("Select pseudo,titre,contenu,date_news,id_reporter from news,reporter where news.id_reporter = reporter.id and news.id = ?");
         stmt.setInt(1,id);
         ResultSet rs = stmt.executeQuery();
         while (rs.next()) {
-            String pseudo = rs.getString(1);
-            String titre = rs.getString(2);
-            String contenu = rs.getString(3);
-            Date dateNews = rs.getDate(4);
-            System.out.print("titre: "+titre+'\n');
-            System.out.print("contenu: "+contenu+'\n');
-            System.out.print("date: "+dateNews+'\n');
-            System.out.print("reporter: "+pseudo+'\n');
+             String pseudo = rs.getString(1);
+             String titre = rs.getString(2);
+             String contenu = rs.getString(3);
+             Date dateNews = rs.getDate(4);
+             int id_reporter = rs.getInt(5);
+             news.setPseudo(pseudo);
+             news.setTitre(titre);
+             news.setContenu(contenu);
+             news.setDateNews(dateNews);
+             news.setIdReporter(id_reporter);
         }
         cx.close();
+        return news;
     }
 
-    public void tagsReadById(int id) throws SQLException, ClassNotFoundException {
-        List<String> listTags = new LinkedList<>();
+    public List<TagsById> tagsReadById(int id) throws SQLException, ClassNotFoundException {
+        List<TagsById> listTags = new LinkedList<TagsById>();
         String tag;
         String titre;
         String contenu;
@@ -44,13 +52,11 @@ public class NewsDAO {
             titre = rs.getString(1);
             contenu = rs.getString(2);
             dateNews = rs.getDate(4);
-            listTags.add(tag);
-            System.out.print("titre: "+titre+'\n');
-            System.out.print("contenu: "+contenu+'\n');
-            System.out.print("date: "+dateNews+'\n');
-            System.out.print("tag: "+tag+'\n');
+            TagsById tagDto = new TagsById(tag,titre,contenu,dateNews);
+            listTags.add(tagDto);
         }
         cx.close();
+        return listTags;
     }
 
     public void insert(News news) throws SQLException, ClassNotFoundException {
@@ -59,15 +65,15 @@ public class NewsDAO {
         PreparedStatement stmt = cx.prepareStatement("Insert into news (titre,contenu,date_news,id_reporter) values (?,?,?,?) ",Statement.RETURN_GENERATED_KEYS);
         stmt.setString(1,news.titre);
         stmt.setString(2,news.contenu);
-        stmt.setDate(3, (Date) news.date_news);
+        stmt.setDate(3, (java.sql.Date) news.date_news);
         stmt.setInt(4,news.id_reporter);
         int rs = stmt.executeUpdate();
         ResultSet rsGeneratedKeys = stmt.getGeneratedKeys();
         cx.close();
     }
 
-    public News getById(int id) throws SQLException, ClassNotFoundException {
-        News news = new News();
+    public NewsDto getById(int id) throws SQLException, ClassNotFoundException {
+        NewsDto news = new NewsDto();
         ConnectDB connectDB = new ConnectDB();
         Connection cx = connectDB.connect();
         PreparedStatement stmt = cx.prepareStatement("Select * from news where id = ?");
@@ -79,11 +85,11 @@ public class NewsDAO {
             String contenu = rs.getString(3);
             Date dateNews = rs.getDate(4);
             int idReporter = rs.getInt(5);
-            news.id = idNews;
-            news.titre = titre;
-            news.contenu = contenu;
-            news.date_news = dateNews;
-            news.id_reporter = idReporter;
+            news.setId(idNews);
+            news.setTitre(titre);
+            news.setContenu(contenu);
+            news.setDate_news(dateNews);
+            news.setId_reporter(idReporter);
         }
         cx.close();
         return news;

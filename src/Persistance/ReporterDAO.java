@@ -1,15 +1,18 @@
 package Persistance;
 
-import Domain.Reporter;
+import Domain.Dto.ReporterDto;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReporterDAO {
 
-    public void readById(int id) throws SQLException, ClassNotFoundException {
+    public ReporterDto readById(int id) throws SQLException, ClassNotFoundException {
+        ReporterDto reporter = new ReporterDto();
         ConnectDB connectDB = new ConnectDB();
         Connection cx = connectDB.connect();
         PreparedStatement stmt = cx.prepareStatement("Select * from reporter where id = ?");
@@ -19,10 +22,12 @@ public class ReporterDAO {
             int idReporter = rs.getInt(1);
             String pseudo = rs.getString(2);
             int credit = rs.getInt(3);
-            System.out.print("pseudo: "+pseudo+'\n');
-            System.out.print("credit: "+credit+'\n');
+            reporter.setId(idReporter);
+            reporter.setPseudo(pseudo);
+            reporter.setCredit(credit);
         }
         cx.close();
+        return reporter;
     }
 
 }
