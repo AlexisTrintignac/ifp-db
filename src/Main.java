@@ -6,6 +6,7 @@ import java.util.List;
 import Domain.Dto.*;
 import Domain.Models.News;
 import Domain.Models.Tags;
+import Persistance.Exceptions.ExceptionNews;
 import Persistance.NewsDAO;
 import Persistance.NewsTagDAO;
 import Persistance.ReporterDAO;
@@ -13,7 +14,7 @@ import Persistance.TagsDAO;
 
 public class Main {
 
-    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+    public static void main(String[] args) throws SQLException, ClassNotFoundException, ExceptionNews {
         ReporterDAO reporterDAO = new ReporterDAO();
         TagsDAO tagsDAO = new TagsDAO();
         NewsTagDAO newsTagsDAO = new NewsTagDAO();

@@ -4,16 +4,21 @@ import Domain.Dto.NewsDto;
 import Domain.Dto.ReporterNews;
 import Domain.Dto.TagsById;
 import Domain.Models.News;
+import Persistance.Exceptions.ExceptionNews;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Date;
 
+
 public class NewsDAO {
 
-    public ReporterNews reporterReadById(int id) throws SQLException, ClassNotFoundException {
+    public NewsDAO(){
+
+    }
+
+    public ReporterNews reporterReadById(int id) throws SQLException, ClassNotFoundException, ExceptionNews {
         ReporterNews news = new ReporterNews();
         ConnectDB connectDB = new ConnectDB();
         Connection cx = connectDB.connect();
@@ -53,6 +58,7 @@ public class NewsDAO {
             contenu = rs.getString(2);
             dateNews = rs.getDate(4);
             TagsById tagDto = new TagsById(tag,titre,contenu,dateNews);
+            ExceptionNews.VerifyTagIsNullOrIncomplet(tagDto);
             listTags.add(tagDto);
         }
         cx.close();
@@ -62,7 +68,7 @@ public class NewsDAO {
     public void insert(News news) throws SQLException, ClassNotFoundException {
         ConnectDB connectDB = new ConnectDB();
         Connection cx = connectDB.connect();
-        PreparedStatement stmt = cx.prepareStatement("Insert into news (titre,contenu,date_news,id_reporter) values (?,?,?,?) ",Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement stmt = cx.prepareStatement("Insert into news (titre,contenu,date_news,id_reporter) values (?,?,?,?) ", Statement.RETURN_GENERATED_KEYS);
         stmt.setString(1,news.titre);
         stmt.setString(2,news.contenu);
         stmt.setDate(3, (java.sql.Date) news.date_news);
@@ -92,6 +98,7 @@ public class NewsDAO {
             news.setId_reporter(idReporter);
         }
         cx.close();
+        ExceptionNews.VerifyNewIsNullOrIncomplet(news);
         return news;
     }
 }
