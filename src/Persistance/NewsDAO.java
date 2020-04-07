@@ -38,6 +38,7 @@ public class NewsDAO {
              news.setIdReporter(id_reporter);
         }
         cx.close();
+        ExceptionNews.VerifyReporterNewsIsNullOrIncomplet(news);
         return news;
     }
 
@@ -75,6 +76,9 @@ public class NewsDAO {
         stmt.setInt(4,news.id_reporter);
         int rs = stmt.executeUpdate();
         ResultSet rsGeneratedKeys = stmt.getGeneratedKeys();
+        //ResultSet rs = statement.getGeneratedKeys();
+        //rs.next();
+        //generatedKeyValue = rs.getInt(1);
         cx.close();
     }
 
