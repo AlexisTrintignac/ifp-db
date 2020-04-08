@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Hibernate">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../ifp/hibernate-release-5.4.14.Final/lib" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
