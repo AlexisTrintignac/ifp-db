@@ -19,6 +19,7 @@ class HibernateBasicTest {
         assertTrue(entityManager.isOpen());
         entityManager.persist(reporterDB);
         entityManager.createQuery("Update REPORTER SET CREDIT=10 WHERE PSEUDO='alexis'");
+        //entityManager.find(Reporter,reporterDB);
         entityManager.close();
         sessionFactory.close();
     }
