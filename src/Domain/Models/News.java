@@ -1,7 +1,11 @@
 package Domain.Models;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.Date;
 
+//@Entity
+//@Table(name = "NEWS")
 public class News {
     public int id;
     public String titre;
