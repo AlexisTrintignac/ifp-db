@@ -1,4 +1,5 @@
 package Domain.Models;
+import org.hibernate.annotations.GeneratorType;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -9,8 +10,8 @@ public class Reporter {
 
     @Id
     @Column(name = "ID")
-    @GeneratedValue(generator="increment")
-    @GenericGenerator(name="increment", strategy = "increment")
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    //@GenericGenerator(name="increment", strategy = "increment")
     private int id;
 
     @Column(name = "PSEUDO")
